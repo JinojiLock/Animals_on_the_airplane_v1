@@ -62,7 +62,12 @@
     "rights": "All rights reserved",
     "contact": "Contact Us",
     "about": "About",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "disclaimer": "Disclaimer",
+    "disclaimerText": "The information is provided for reference purposes only. We are not responsible for the accuracy of the data. Please verify current rules on official airline websites before booking.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "legal": "Legal Information"
   },
   "donate": {
     "button": "Support Project",

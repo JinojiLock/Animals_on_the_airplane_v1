@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Airline, TransportMethod } from '../types';
+import type { Airline } from '../types';
+import TransportMethodBadge from './TransportMethodBadge';
 
 interface AirlineCardProps {
   airline: Airline;
@@ -8,12 +9,6 @@ interface AirlineCardProps {
 
 const AirlineCard: React.FC<AirlineCardProps> = ({ airline }) => {
   const { t } = useTranslation();
-
-  const transportMethodLabels: Record<TransportMethod, string> = {
-    cargo: `📦 ${t('filters.cargo')}`,
-    baggage: `🧳 ${t('filters.baggage')}`,
-    cabin: `✈️ ${t('filters.cabin')}`,
-  };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 dark:border-gray-700 flex flex-col">
@@ -30,12 +25,11 @@ const AirlineCard: React.FC<AirlineCardProps> = ({ airline }) => {
         </h4>
         <div className="flex flex-wrap gap-2">
           {airline.transportMethods.map((method) => (
-            <span
+            <TransportMethodBadge
               key={method}
-              className="px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 rounded-lg text-sm font-medium"
-            >
-              {transportMethodLabels[method]}
-            </span>
+              method={method}
+              conditions={airline.conditions?.[method]}
+            />
           ))}
         </div>
       </div>
