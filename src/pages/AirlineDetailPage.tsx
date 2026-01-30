@@ -207,7 +207,7 @@ const AirlineDetailPage: React.FC = () => {
                             <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
                               {t('airline.maxCarrierSize')}:
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400">
+                            <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
                               {conditions.maxCarrierSize}
                             </p>
                           </div>
@@ -218,7 +218,7 @@ const AirlineDetailPage: React.FC = () => {
                             <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
                               {t('airline.maxWeight')}:
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400">
+                            <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
                               {conditions.maxWeight}
                             </p>
                           </div>
@@ -229,7 +229,7 @@ const AirlineDetailPage: React.FC = () => {
                             <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
                               {t('airline.allowedAnimals')}:
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400">
+                            <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
                               {conditions.allowedAnimals.join(', ')}
                             </p>
                           </div>
@@ -240,7 +240,7 @@ const AirlineDetailPage: React.FC = () => {
                             <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
                               {t('airline.additionalInfo')}:
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 whitespace-pre-line">
+                            <p className="text-gray-600 dark:text-gray-400 break-words whitespace-pre-wrap">
                               {conditions.additionalInfo}
                             </p>
                           </div>

@@ -38,7 +38,7 @@ const TransportMethodBadge: React.FC<TransportMethodBadgeProps> = ({ method, con
 
       {/* Tooltip */}
       {showTooltip && hasDetails && (
-        <div className="absolute z-50 bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-72 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-2 border-blue-500 dark:border-blue-400">
+        <div className="absolute z-50 bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-80 max-w-sm p-4 bg-white dark:bg-gray-800 rounded-lg shadow-2xl border-2 border-blue-500 dark:border-blue-400">
           {/* Стрелка */}
           <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-px">
             <div className="border-8 border-transparent border-t-blue-500 dark:border-t-blue-400"></div>
@@ -52,13 +52,13 @@ const TransportMethodBadge: React.FC<TransportMethodBadgeProps> = ({ method, con
           </div>
 
           {/* Детали */}
-          <div className="space-y-2 text-sm">
+          <div className="space-y-3 text-sm max-h-96 overflow-y-auto">
             {conditions?.maxCarrierSize && (
               <div>
-                <span className="font-semibold text-gray-700 dark:text-gray-300">
+                <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
                   {t('airline.maxCarrierSize')}:
                 </span>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
                   {conditions.maxCarrierSize}
                 </p>
               </div>
@@ -66,10 +66,10 @@ const TransportMethodBadge: React.FC<TransportMethodBadgeProps> = ({ method, con
 
             {conditions?.maxWeight && (
               <div>
-                <span className="font-semibold text-gray-700 dark:text-gray-300">
+                <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
                   {t('airline.maxWeight')}:
                 </span>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
                   {conditions.maxWeight}
                 </p>
               </div>
@@ -77,10 +77,10 @@ const TransportMethodBadge: React.FC<TransportMethodBadgeProps> = ({ method, con
 
             {conditions?.allowedAnimals && conditions.allowedAnimals.length > 0 && (
               <div>
-                <span className="font-semibold text-gray-700 dark:text-gray-300">
+                <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
                   {t('airline.allowedAnimals')}:
                 </span>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
                   {conditions.allowedAnimals.join(', ')}
                 </p>
               </div>
@@ -88,10 +88,10 @@ const TransportMethodBadge: React.FC<TransportMethodBadgeProps> = ({ method, con
 
             {conditions?.additionalInfo && (
               <div>
-                <span className="font-semibold text-gray-700 dark:text-gray-300">
+                <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
                   {t('airline.additionalInfo')}:
                 </span>
-                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
                   {conditions.additionalInfo.length > 100
                     ? `${conditions.additionalInfo.substring(0, 100)}...`
                     : conditions.additionalInfo}
