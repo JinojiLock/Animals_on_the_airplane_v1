@@ -168,20 +168,20 @@ export function AdminPanel() {
           </div>
         ) : (
           /* Airlines List */
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-white rounded-lg shadow-lg overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">
                     Авиакомпания
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
                     Способы перевозки
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">
                     ID
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
                     Действия
                   </th>
                 </tr>
@@ -189,11 +189,11 @@ export function AdminPanel() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {airlines.map(airline => (
                   <tr key={airline.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-6 py-4">
                       <div className="flex items-center">
-                        <span className="text-2xl mr-3">{airline.logo}</span>
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">
+                        <span className="text-2xl mr-3 flex-shrink-0">{airline.logo}</span>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-sm font-medium text-gray-900 break-words">
                             {airline.name}
                           </div>
                         </div>
@@ -204,7 +204,7 @@ export function AdminPanel() {
                         {airline.transportMethods.map(method => (
                           <span
                             key={method}
-                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 whitespace-nowrap"
                           >
                             {method === 'cabin' && 'Салон'}
                             {method === 'baggage' && 'Багаж'}
@@ -213,22 +213,26 @@ export function AdminPanel() {
                         ))}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {airline.id}
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      <div className="break-words max-w-[150px]">
+                        {airline.id}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button
-                        onClick={() => handleEdit(airline)}
-                        className="text-blue-600 hover:text-blue-900 mr-4"
-                      >
-                        Редактировать
-                      </button>
-                      <button
-                        onClick={() => handleDelete(airline.id)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        Удалить
-                      </button>
+                    <td className="px-6 py-4 text-right text-sm font-medium">
+                      <div className="flex flex-col sm:flex-row gap-2 justify-end">
+                        <button
+                          onClick={() => handleEdit(airline)}
+                          className="text-blue-600 hover:text-blue-900 whitespace-nowrap"
+                        >
+                          Редактировать
+                        </button>
+                        <button
+                          onClick={() => handleDelete(airline.id)}
+                          className="text-red-600 hover:text-red-900 whitespace-nowrap"
+                        >
+                          Удалить
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
