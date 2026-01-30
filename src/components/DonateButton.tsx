@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const DonateButton: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <>
@@ -10,7 +12,7 @@ const DonateButton: React.FC = () => {
         className="fixed bottom-6 right-6 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center gap-2 z-40"
       >
         <span className="text-xl">❤️</span>
-        <span className="font-semibold">Поддержать проект</span>
+        <span className="font-semibold">{t('donate.button')}</span>
       </button>
 
       {showModal && (
@@ -28,16 +30,16 @@ const DonateButton: React.FC = () => {
             <div className="text-center">
               <span className="text-6xl mb-4 block">❤️</span>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                Поддержать проект
+                {t('donate.title')}
               </h2>
               <p className="text-gray-600 mb-6">
-                Ваша поддержка помогает развивать проект и добавлять новые авиакомпании
+                {t('donate.description')}
               </p>
 
               {/* Здесь будет интеграция с платежной системой */}
               <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 mb-4">
                 <p className="text-gray-700 mb-4">
-                  💳 Скоро здесь появятся способы поддержки:
+                  💳 Coming soon - Payment methods:
                 </p>
                 <div className="space-y-2 text-left text-sm text-gray-600">
                   <div className="flex items-center gap-2">
@@ -46,11 +48,11 @@ const DonateButton: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <span>💳</span>
-                    <span>Банковская карта</span>
+                    <span>Credit Card</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span>₿</span>
-                    <span>Криптовалюта</span>
+                    <span>Cryptocurrency</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span>☕</span>
@@ -62,9 +64,9 @@ const DonateButton: React.FC = () => {
               {/* Временный блок */}
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <p className="text-sm text-gray-700">
-                  🚧 Платежная система в разработке.
+                  🚧 Payment system in development.
                   <br />
-                  Пока можете поддержать звездочкой на GitHub! ⭐
+                  Meanwhile, support us with a star on GitHub! ⭐
                 </p>
               </div>
 

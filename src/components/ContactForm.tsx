@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ContactFormProps {
   onClose: () => void;
 }
 
 const ContactForm: React.FC<ContactFormProps> = ({ onClose }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -22,13 +24,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ onClose }) => {
     try {
       // Формируем сообщение для Telegram
       const telegramMessage = `
-🐾 *Новое сообщение с Pet Airlines*
+🐾 *${t('contact.title')} - ${t('common.appName')}*
 
-👤 *Имя:* ${formData.name}
-📧 *Email:* ${formData.email}
-📝 *Тип:* ${formData.type === 'feedback' ? 'Отзыв' : formData.type === 'question' ? 'Вопрос' : 'Предложение'}
+👤 *${t('contact.name')}:* ${formData.name}
+📧 *${t('contact.email')}:* ${formData.email}
+📝 *${t('contact.messageType')}:* ${formData.type === 'feedback' ? t('contact.feedback') : formData.type === 'question' ? t('contact.question') : t('contact.request')}
 
-💬 *Сообщение:*
+💬 *${t('contact.message')}:*
 ${formData.message}
       `.trim();
 
@@ -81,9 +83,9 @@ ${formData.message}
   };
 
   const typeLabels = {
-    feedback: '💬 Отзыв',
-    question: '❓ Вопрос',
-    request: '💡 Предложение',
+    feedback: t('contact.feedback'),
+    question: t('contact.question'),
+    request: t('contact.request'),
   };
 
   return (
@@ -98,15 +100,15 @@ ${formData.message}
           </svg>
         </button>
 
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Обратная связь</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('contact.title')}</h2>
         <p className="text-gray-600 mb-6 text-sm">
-          Напишите нам, если нашли ошибку или хотите что-то предложить
+          {t('contact.description')}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-              Ваше имя
+              {t('contact.name')}
             </label>
             <input
               id="name"
@@ -115,13 +117,13 @@ ${formData.message}
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-              placeholder="Иван"
+              placeholder={t('contact.namePlaceholder')}
             />
           </div>
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              Email
+              {t('contact.email')}
             </label>
             <input
               id="email"
@@ -130,13 +132,13 @@ ${formData.message}
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-              placeholder="ivan@example.com"
+              placeholder={t('contact.emailPlaceholder')}
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Тип сообщения
+              {t('contact.messageType')}
             </label>
             <div className="flex gap-2">
               {(['feedback', 'question', 'request'] as const).map((type) => (
@@ -158,7 +160,7 @@ ${formData.message}
 
           <div>
             <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-              Сообщение
+              {t('contact.message')}
             </label>
             <textarea
               id="message"
@@ -167,19 +169,19 @@ ${formData.message}
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition resize-none"
-              placeholder="Опишите вашу проблему или предложение..."
+              placeholder={t('contact.messagePlaceholder')}
             />
           </div>
 
           {submitStatus === 'success' && (
             <div className="bg-green-50 text-green-800 px-4 py-3 rounded-lg text-sm">
-              ✅ Сообщение успешно отправлено!
+              {t('contact.success')}
             </div>
           )}
 
           {submitStatus === 'error' && (
             <div className="bg-red-50 text-red-800 px-4 py-3 rounded-lg text-sm">
-              ❌ Ошибка отправки. Попробуйте позже или напишите на почту.
+              {t('contact.error')}
             </div>
           )}
 
@@ -188,7 +190,7 @@ ${formData.message}
             disabled={isSubmitting}
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? 'Отправка...' : 'Отправить сообщение'}
+            {isSubmitting ? t('contact.sending') : t('contact.send')}
           </button>
         </form>
       </div>

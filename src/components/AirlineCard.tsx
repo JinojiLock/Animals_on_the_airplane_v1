@@ -1,17 +1,20 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Airline, TransportMethod } from '../types';
 
 interface AirlineCardProps {
   airline: Airline;
 }
 
-const transportMethodLabels: Record<TransportMethod, string> = {
-  cargo: '📦 Карго',
-  baggage: '🧳 Багаж',
-  cabin: '✈️ Салон',
-};
-
 const AirlineCard: React.FC<AirlineCardProps> = ({ airline }) => {
+  const { t } = useTranslation();
+
+  const transportMethodLabels: Record<TransportMethod, string> = {
+    cargo: `📦 ${t('filters.cargo')}`,
+    baggage: `🧳 ${t('filters.baggage')}`,
+    cabin: `✈️ ${t('filters.cabin')}`,
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100 flex flex-col">
       {/* Название авиакомпании */}
@@ -23,7 +26,7 @@ const AirlineCard: React.FC<AirlineCardProps> = ({ airline }) => {
       {/* Доступные способы перевозки */}
       <div className="mb-6 flex-grow">
         <h4 className="text-sm font-semibold text-gray-600 mb-2">
-          Допустимый вид транспортировки:
+          {t('airline.transportMethods')}:
         </h4>
         <div className="flex flex-wrap gap-2">
           {airline.transportMethods.map((method) => (
@@ -45,7 +48,7 @@ const AirlineCard: React.FC<AirlineCardProps> = ({ airline }) => {
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
         >
-          <span>Правила авиакомпании</span>
+          <span>{t('airline.officialRules')}</span>
           <svg
             className="w-4 h-4 ml-2"
             fill="none"

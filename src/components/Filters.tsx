@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { TransportMethod } from '../types';
 
 interface FiltersProps {
@@ -8,33 +9,35 @@ interface FiltersProps {
   onSearchChange: (query: string) => void;
 }
 
-const transportMethodLabels: Record<TransportMethod, string> = {
-  cargo: '📦 Карго',
-  baggage: '🧳 В багаже',
-  cabin: '✈️ В салоне',
-};
-
 const Filters: React.FC<FiltersProps> = ({
   selectedMethods,
   searchQuery,
   onMethodToggle,
   onSearchChange,
 }) => {
+  const { t } = useTranslation();
+
+  const transportMethodLabels: Record<TransportMethod, string> = {
+    cargo: `📦 ${t('filters.cargo')}`,
+    baggage: `🧳 ${t('filters.baggage')}`,
+    cabin: `✈️ ${t('filters.cabin')}`,
+  };
+
   return (
     <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">Фильтры</h2>
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">{t('filters.transportMethod')}</h2>
       
       {/* Поиск по названию авиакомпании */}
       <div className="mb-6">
         <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
-          Поиск авиакомпании
+          {t('common.search')}
         </label>
         <input
           id="search"
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Введите название авиакомпании..."
+          placeholder={t('filters.searchPlaceholder')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
         />
       </div>
@@ -42,7 +45,7 @@ const Filters: React.FC<FiltersProps> = ({
       {/* Фильтр по способу перевозки */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-3">
-          Способ перевозки
+          {t('filters.transportMethod')}
         </label>
         <div className="flex flex-wrap gap-3">
           {(Object.keys(transportMethodLabels) as TransportMethod[]).map((method) => (
@@ -64,7 +67,7 @@ const Filters: React.FC<FiltersProps> = ({
             onClick={() => selectedMethods.forEach(onMethodToggle)}
             className="mt-3 text-sm text-blue-600 hover:text-blue-800 underline"
           >
-            Сбросить фильтры
+            {t('filters.reset')}
           </button>
         )}
       </div>

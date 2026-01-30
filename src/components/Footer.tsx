@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ContactForm from './ContactForm';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const [showContactForm, setShowContactForm] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <footer className="bg-gray-800 text-white mt-12">
@@ -13,31 +15,30 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-semibold mb-3 flex items-center">
               <span className="mr-2">🐾</span>
-              О проекте
+              {t('footer.about')}
             </h3>
             <p className="text-gray-300 text-sm">
-              Справочник по перевозке животных авиакомпаниями. 
-              Вся информация собрана для удобства путешественников с питомцами.
+              {t('header.title')}. {t('header.subtitle')}.
             </p>
           </div>
 
           {/* Полезные ссылки */}
           <div>
-            <h3 className="text-lg font-semibold mb-3">Полезная информация</h3>
+            <h3 className="text-lg font-semibold mb-3">{t('footer.faq')}</h3>
             <ul className="text-gray-300 text-sm space-y-2">
               <li>
                 <span className="hover:text-blue-400 transition-colors cursor-pointer">
-                  • Как подготовить питомца к полету
+                  • How to prepare your pet for flight
                 </span>
               </li>
               <li>
                 <span className="hover:text-blue-400 transition-colors cursor-pointer">
-                  • Необходимые документы
+                  • Required documents
                 </span>
               </li>
               <li>
                 <span className="hover:text-blue-400 transition-colors cursor-pointer">
-                  • Выбор переноски
+                  • Choosing a carrier
                 </span>
               </li>
             </ul>
@@ -45,24 +46,24 @@ const Footer: React.FC = () => {
 
           {/* Контакты */}
           <div>
-            <h3 className="text-lg font-semibold mb-3">Контакты</h3>
+            <h3 className="text-lg font-semibold mb-3">{t('footer.contact')}</h3>
             <p className="text-gray-300 text-sm mb-3">
-              Нашли ошибку или хотите дополнить информацию?
+              {t('contact.description')}
             </p>
             <button
               onClick={() => setShowContactForm(true)}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
             >
-              📧 Написать нам
+              📧 {t('footer.contact')}
             </button>
           </div>
         </div>
 
         {/* Copyright */}
         <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
-          <p>© {currentYear} Pet Airlines Directory. Все права защищены.</p>
+          <p>© {currentYear} {t('common.appName')}. {t('footer.rights')}.</p>
           <p className="mt-2 text-xs">
-            Информация носит справочный характер. Перед полетом уточняйте актуальные правила на сайте авиакомпании.
+            Information is for reference only. Please verify current rules on airline website before your flight.
           </p>
         </div>
       </div>
