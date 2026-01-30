@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import Filters from '../components/Filters';
 import AirlineCard from '../components/AirlineCard';
 import Footer from '../components/Footer';
 import DonateButton from '../components/DonateButton';
 import SEO from '../components/SEO';
+import LanguageNotification from '../components/LanguageNotification';
 import { ApiService } from '../services/ApiService';
 import type { Airline } from '../types';
 import { useFilters } from '../hooks/useFilters';
@@ -16,6 +18,7 @@ import {
 } from '../utils/seoSchemas';
 
 export function HomePage() {
+  const { t } = useTranslation();
   const [airlines, setAirlines] = useState<Airline[]>([]);
   const [filteredAirlines, setFilteredAirlines] = useState<Airline[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,10 +72,12 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <LanguageNotification />
+      
       <SEO 
-        title="AirPets - Справочник по перевозке животных авиакомпаниями"
-        description="Найдите подходящую авиакомпанию для путешествий с питомцами. Полная информация о правилах перевозки собак, кошек и других животных в салоне, багаже и карго."
-        keywords="перевозка животных самолетом, авиакомпании с животными, путешествие с питомцем, перевозка собак, перевозка кошек, салон, багаж, карго, AirPets"
+        title={`AirPets - ${t('header.title')}`}
+        description={t('header.subtitle')}
+        keywords="перевозка животных самолетом, авиакомпании с животными, путешествие с питомцем, перевозка собак, перевозка кошек, салон, багаж, карго, AirPets, pet travel, airlines with pets"
         structuredData={combineSchemas(
           getOrganizationSchema(),
           getWebSiteSchema(),
@@ -92,7 +97,7 @@ export function HomePage() {
 
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-            {error}
+            {t('results.loadError')}
           </div>
         )}
 
@@ -104,16 +109,16 @@ export function HomePage() {
           <div className="text-center py-20">
             <span className="text-6xl mb-4 block">🔍</span>
             <h3 className="text-2xl font-semibold text-gray-700 mb-2">
-              Авиакомпании не найдены
+              {t('results.notFound')}
             </h3>
             <p className="text-gray-500">
-              Попробуйте изменить параметры поиска или сбросить фильтры
+              {t('results.notFoundDescription')}
             </p>
           </div>
         ) : (
           <>
             <div className="mb-4 text-gray-600">
-              Найдено авиакомпаний: <span className="font-semibold">{filteredAirlines.length}</span>
+              {t('results.found')}: <span className="font-semibold">{filteredAirlines.length}</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredAirlines.map((airline) => (
