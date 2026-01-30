@@ -71,7 +71,7 @@ export function HomePage() {
   }, [filters, airlines]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 transition-colors">
       <LanguageNotification />
       
       <SEO 
@@ -108,16 +108,16 @@ export function HomePage() {
         ) : filteredAirlines.length === 0 ? (
           <div className="text-center py-20">
             <span className="text-6xl mb-4 block">🔍</span>
-            <h3 className="text-2xl font-semibold text-gray-700 mb-2">
+            <h3 className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
               {t('results.notFound')}
             </h3>
-            <p className="text-gray-500">
+            <p className="text-gray-500 dark:text-gray-400">
               {t('results.notFoundDescription')}
             </p>
           </div>
         ) : (
           <>
-            <div className="mb-4 text-gray-600">
+            <div className="mb-4 text-gray-600 dark:text-gray-400">
               {t('results.found')}: <span className="font-semibold">{filteredAirlines.length}</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

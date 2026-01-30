@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState } from 'react';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { HomePage } from './pages/HomePage';
 import { AdminPanel } from './pages/admin/AdminPanel';
 import { LoginPage } from './pages/admin/LoginPage';
@@ -33,27 +34,29 @@ function App() {
   });
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<HomePage />} />
-        
-        {/* Admin routes */}
-        <Route
-          path="/admin"
-          element={
-            isAdminAuthenticated ? (
-              <AdminPanel />
-            ) : (
-              <LoginPage onLogin={handleLogin} />
-            )
-          }
-        />
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<HomePage />} />
+          
+          {/* Admin routes */}
+          <Route
+            path="/admin"
+            element={
+              isAdminAuthenticated ? (
+                <AdminPanel />
+              ) : (
+                <LoginPage onLogin={handleLogin} />
+              )
+            }
+          />
 
-        {/* Redirect unknown routes to home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+          {/* Redirect unknown routes to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
