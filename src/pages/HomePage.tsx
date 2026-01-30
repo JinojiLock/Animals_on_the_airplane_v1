@@ -4,9 +4,16 @@ import Filters from '../components/Filters';
 import AirlineCard from '../components/AirlineCard';
 import Footer from '../components/Footer';
 import DonateButton from '../components/DonateButton';
+import SEO from '../components/SEO';
 import { ApiService } from '../services/ApiService';
 import type { Airline } from '../types';
 import { useFilters } from '../hooks/useFilters';
+import { 
+  getOrganizationSchema, 
+  getWebSiteSchema, 
+  getAirlinesListSchema,
+  combineSchemas 
+} from '../utils/seoSchemas';
 
 export function HomePage() {
   const [airlines, setAirlines] = useState<Airline[]>([]);
@@ -62,6 +69,17 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <SEO 
+        title="AirPets - Справочник по перевозке животных авиакомпаниями"
+        description="Найдите подходящую авиакомпанию для путешествий с питомцами. Полная информация о правилах перевозки собак, кошек и других животных в салоне, багаже и карго."
+        keywords="перевозка животных самолетом, авиакомпании с животными, путешествие с питомцем, перевозка собак, перевозка кошек, салон, багаж, карго, AirPets"
+        structuredData={combineSchemas(
+          getOrganizationSchema(),
+          getWebSiteSchema(),
+          airlines.length > 0 ? getAirlinesListSchema(airlines) : null
+        ).filter(Boolean)}
+      />
+      
       <Header />
 
       <main className="flex-grow container mx-auto px-4 py-8">
