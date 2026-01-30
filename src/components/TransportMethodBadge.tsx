@@ -92,7 +92,9 @@ const TransportMethodBadge: React.FC<TransportMethodBadgeProps> = ({ method, con
                   {t('airline.additionalInfo')}:
                 </span>
                 <p className="text-gray-600 dark:text-gray-400 mt-1">
-                  {conditions.additionalInfo}
+                  {conditions.additionalInfo.length > 100
+                    ? `${conditions.additionalInfo.substring(0, 100)}...`
+                    : conditions.additionalInfo}
                 </p>
               </div>
             )}

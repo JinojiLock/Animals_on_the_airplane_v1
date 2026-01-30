@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { HomePage } from './pages/HomePage';
+import AirlineDetailPage from './pages/AirlineDetailPage';
 import { AdminPanel } from './pages/admin/AdminPanel';
 import { LoginPage } from './pages/admin/LoginPage';
 
@@ -39,6 +40,7 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<HomePage />} />
+          <Route path="/airline/:id" element={<AirlineDetailPage />} />
           
           {/* Admin routes */}
           <Route

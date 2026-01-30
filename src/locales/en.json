@@ -27,12 +27,18 @@
   },
   "airline": {
     "transportMethods": "Transport Methods",
+    "transportConditions": "Pet Transport Conditions",
     "conditions": "Transport Conditions",
     "maxCarrierSize": "Carrier Size",
     "maxWeight": "Maximum Weight",
     "allowedAnimals": "Allowed Animals",
     "additionalInfo": "Additional Information",
-    "officialRules": "Official Rules"
+    "officialRules": "Official Rules",
+    "detailsFor": "Detailed pet transport conditions for",
+    "availableMethods": "Available transport methods",
+    "fullInfo": "Complete information about carrier sizes, weight limits and requirements",
+    "petTransport": "pet transport",
+    "viewDetails": "View Details"
   },
   "results": {
     "found": "Airlines found",

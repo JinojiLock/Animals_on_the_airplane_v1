@@ -120,6 +120,42 @@ export const getAirlineArticleSchema = (airline: Airline) => ({
 });
 
 /**
+ * Airline Detail Schema (combines Article and Service)
+ * https://schema.org/Service
+ */
+export const getAirlineSchema = (airline: Airline, language: string = 'ru') => {
+  const baseUrl = 'https://air-pets.com';
+  
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: language === 'ru' 
+      ? `Перевозка животных ${airline.name}`
+      : `Pet Transport ${airline.name}`,
+    description: language === 'ru'
+      ? `Подробная информация о правилах перевозки домашних животных авиакомпанией ${airline.name}. Доступные способы: ${airline.transportMethods.join(', ')}.`
+      : `Detailed pet transport rules for ${airline.name}. Available methods: ${airline.transportMethods.join(', ')}.`,
+    provider: {
+      '@type': 'Airline',
+      name: airline.name,
+      url: airline.rulesUrl
+    },
+    serviceType: 'Pet Transportation',
+    areaServed: 'International',
+    availableChannel: airline.transportMethods.map(method => ({
+      '@type': 'ServiceChannel',
+      name: method,
+      serviceUrl: airline.rulesUrl
+    })),
+    url: `${baseUrl}/airline/${airline.id}`,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${baseUrl}/airline/${airline.id}`
+    }
+  };
+};
+
+/**
  * FAQPage Schema
  * https://schema.org/FAQPage
  */

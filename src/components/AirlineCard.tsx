@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import type { Airline } from '../types';
 import TransportMethodBadge from './TransportMethodBadge';
 
@@ -35,7 +36,26 @@ const AirlineCard: React.FC<AirlineCardProps> = ({ airline }) => {
       </div>
 
       {/* Ссылка на сайт */}
-      <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
+        <Link
+          to={`/airline/${airline.id}`}
+          className="inline-flex items-center justify-center w-full bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors mb-2"
+        >
+          <span>{t('airline.viewDetails')}</span>
+          <svg
+            className="w-4 h-4 ml-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13 7l5 5m0 0l-5 5m5-5H6"
+            />
+          </svg>
+        </Link>
         <a
           href={airline.rulesUrl}
           target="_blank"
