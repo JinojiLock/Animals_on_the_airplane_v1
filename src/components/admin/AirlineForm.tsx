@@ -137,18 +137,55 @@ export function AirlineForm({ airline, onSubmit, onCancel }: AirlineFormProps) {
   const handleConditionChange = (
     method: TransportMethod,
     field: keyof TransportConditions,
-    value: string | string[]
+    value: string | string[],
+    lang: 'ru' | 'en' = 'ru'
   ) => {
-    setFormData(prev => ({
-      ...prev,
-      conditions: {
-        ...prev.conditions,
-        [method]: {
-          ...prev.conditions[method],
-          [field]: value,
+    setFormData(prev => {
+      const currentCond = prev.conditions[method] || {};
+      let newValue: any;
+
+      if (lang === 'en') {
+        // Editing English version
+        const ruValue = currentCond[field];
+        newValue = { ru: ruValue, en: value };
+      } else {
+        // Editing Russian version
+        const existingValue = currentCond[field];
+        if (typeof existingValue === 'object' && existingValue && 'en' in existingValue) {
+          // Preserve English if it exists
+          newValue = { ru: value, en: existingValue.en };
+        } else {
+          // No English yet, just store Russian
+          newValue = value;
+        }
+      }
+
+      return {
+        ...prev,
+        conditions: {
+          ...prev.conditions,
+          [method]: {
+            ...currentCond,
+            [field]: newValue,
+          },
         },
-      },
-    }));
+      };
+    });
+  };
+
+  // Helper to get value in specific language
+  const getConditionValue = (method: TransportMethod, field: keyof TransportConditions, lang: 'ru' | 'en' = 'ru'): any => {
+    const cond = formData.conditions[method];
+    if (!cond) return '';
+    
+    const value = cond[field];
+    if (!value) return '';
+    
+    if (typeof value === 'object' && 'ru' in value) {
+      return lang === 'en' ? value.en || '' : value.ru || '';
+    }
+    
+    return lang === 'ru' ? value : '';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -363,77 +400,159 @@ export function AirlineForm({ airline, onSubmit, onCancel }: AirlineFormProps) {
             </div>
           )}
 
-          <div className="space-y-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Размер переноски
-              </label>
-              <input
-                type="text"
-                value={formData.conditions[method]?.maxCarrierSize || ''}
-                onChange={e => {
-                  handleConditionChange(method, 'maxCarrierSize', e.target.value);
-                  setValidationErrors(prev => ({ ...prev, [`conditions_${method}`]: '' }));
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="55x40x25 см"
-              />
-              <p className="text-xs text-gray-500 mt-1">Например: 55x40x25 см или До 120×80×85 см</p>
+          <div className="space-y-6">
+            {/* Размер переноски */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Размер переноски (RU)
+                </label>
+                <input
+                  type="text"
+                  value={getConditionValue(method, 'maxCarrierSize', 'ru')}
+                  onChange={e => {
+                    handleConditionChange(method, 'maxCarrierSize', e.target.value, 'ru');
+                    setValidationErrors(prev => ({ ...prev, [`conditions_${method}`]: '' }));
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="55x40x25 см"
+                />
+                <p className="text-xs text-gray-500 mt-1">Например: 55x40x25 см</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Размер переноски (EN) 🌐
+                </label>
+                <input
+                  type="text"
+                  value={getConditionValue(method, 'maxCarrierSize', 'en')}
+                  onChange={e => {
+                    handleConditionChange(method, 'maxCarrierSize', e.target.value, 'en');
+                  }}
+                  className="w-full px-3 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-50"
+                  placeholder="55x40x25 cm"
+                />
+                <p className="text-xs text-gray-500 mt-1">English version</p>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Максимальный вес
-              </label>
-              <input
-                type="text"
-                value={formData.conditions[method]?.maxWeight || ''}
-                onChange={e => {
-                  handleConditionChange(method, 'maxWeight', e.target.value);
-                  setValidationErrors(prev => ({ ...prev, [`conditions_${method}`]: '' }));
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="8 кг"
-              />
-              <p className="text-xs text-gray-500 mt-1">Например: 8 кг или До 32 кг (вместе с переноской)</p>
+            {/* Максимальный вес */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Максимальный вес (RU)
+                </label>
+                <input
+                  type="text"
+                  value={getConditionValue(method, 'maxWeight', 'ru')}
+                  onChange={e => {
+                    handleConditionChange(method, 'maxWeight', e.target.value, 'ru');
+                    setValidationErrors(prev => ({ ...prev, [`conditions_${method}`]: '' }));
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="8 кг"
+                />
+                <p className="text-xs text-gray-500 mt-1">Например: 8 кг</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Максимальный вес (EN) 🌐
+                </label>
+                <input
+                  type="text"
+                  value={getConditionValue(method, 'maxWeight', 'en')}
+                  onChange={e => {
+                    handleConditionChange(method, 'maxWeight', e.target.value, 'en');
+                  }}
+                  className="w-full px-3 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-50"
+                  placeholder="8 kg"
+                />
+                <p className="text-xs text-gray-500 mt-1">English version</p>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Допустимые животные (через запятую)
-              </label>
-              <textarea
-                value={formData.conditions[method]?.allowedAnimals?.join(', ') || ''}
-                onChange={e => {
-                  handleConditionChange(
-                    method,
-                    'allowedAnimals',
-                    e.target.value.split(',').map(s => s.trim()).filter(Boolean)
-                  );
-                  setValidationErrors(prev => ({ ...prev, [`conditions_${method}`]: '' }));
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows={2}
-                placeholder="собаки, кошки, птицы"
-              />
-              <p className="text-xs text-gray-500 mt-1">Перечислите животных через запятую</p>
+            {/* Допустимые животные */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Допустимые животные (RU)
+                </label>
+                <textarea
+                  value={Array.isArray(getConditionValue(method, 'allowedAnimals', 'ru')) 
+                    ? getConditionValue(method, 'allowedAnimals', 'ru').join(', ') 
+                    : ''}
+                  onChange={e => {
+                    handleConditionChange(
+                      method,
+                      'allowedAnimals',
+                      e.target.value.split(',').map(s => s.trim()).filter(Boolean),
+                      'ru'
+                    );
+                    setValidationErrors(prev => ({ ...prev, [`conditions_${method}`]: '' }));
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={2}
+                  placeholder="собаки, кошки, птицы"
+                />
+                <p className="text-xs text-gray-500 mt-1">Через запятую</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Допустимые животные (EN) 🌐
+                </label>
+                <textarea
+                  value={Array.isArray(getConditionValue(method, 'allowedAnimals', 'en')) 
+                    ? getConditionValue(method, 'allowedAnimals', 'en').join(', ') 
+                    : ''}
+                  onChange={e => {
+                    handleConditionChange(
+                      method,
+                      'allowedAnimals',
+                      e.target.value.split(',').map(s => s.trim()).filter(Boolean),
+                      'en'
+                    );
+                  }}
+                  className="w-full px-3 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-50"
+                  rows={2}
+                  placeholder="dogs, cats, birds"
+                />
+                <p className="text-xs text-gray-500 mt-1">Comma separated</p>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Дополнительная информация
-              </label>
-              <textarea
-                value={formData.conditions[method]?.additionalInfo || ''}
-                onChange={e => {
-                  handleConditionChange(method, 'additionalInfo', e.target.value);
-                  setValidationErrors(prev => ({ ...prev, [`conditions_${method}`]: '' }));
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows={4}
-                placeholder="Дополнительные требования и ограничения"
-              />
-              <p className="text-xs text-gray-500 mt-1">Любая дополнительная информация о перевозке</p>
+            {/* Дополнительная информация */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Дополнительная информация (RU)
+                </label>
+                <textarea
+                  value={getConditionValue(method, 'additionalInfo', 'ru')}
+                  onChange={e => {
+                    handleConditionChange(method, 'additionalInfo', e.target.value, 'ru');
+                    setValidationErrors(prev => ({ ...prev, [`conditions_${method}`]: '' }));
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={4}
+                  placeholder="Дополнительные требования и ограничения"
+                />
+                <p className="text-xs text-gray-500 mt-1">Любая дополнительная информация</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Дополнительная информация (EN) 🌐
+                </label>
+                <textarea
+                  value={getConditionValue(method, 'additionalInfo', 'en')}
+                  onChange={e => {
+                    handleConditionChange(method, 'additionalInfo', e.target.value, 'en');
+                  }}
+                  className="w-full px-3 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-50"
+                  rows={4}
+                  placeholder="Additional requirements and restrictions"
+                />
+                <p className="text-xs text-gray-500 mt-1">Any additional information</p>
+              </div>
             </div>
           </div>
         </div>
