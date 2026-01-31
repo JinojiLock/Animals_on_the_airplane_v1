@@ -1,31 +1,34 @@
-import type { TransportConditions } from '../types';
+import type { Conditions, LocalizedValue, LocalizedArray } from '../types';
 
 /**
- * Get localized value from conditions based on current language
+ * Get localized value based on current language
+ */
+export function getLocalizedValue(
+  value: LocalizedValue | LocalizedArray | undefined,
+  language: string
+): string | string[] | undefined {
+  if (!value) return undefined;
+  
+  if (typeof value === 'object' && !Array.isArray(value)) {
+    if (language === 'en' && value.en) {
+      return value.en;
+    }
+    return value.ru || value.en;
+  }
+  
+  return value;
+}
+
+/**
+ * Get localized condition field
  */
 export function getLocalizedCondition(
-  conditions: TransportConditions | undefined,
-  field: keyof TransportConditions,
+  conditions: Conditions | undefined,
+  field: keyof Conditions,
   language: string
 ): string | string[] | undefined {
   if (!conditions) return undefined;
-
-  const isEnglish = language === 'en';
   
-  // Map fields to their English counterparts
-  const fieldMap: Record<string, string> = {
-    maxCarrierSize: 'maxCarrierSizeEn',
-    maxWeight: 'maxWeightEn',
-    allowedAnimals: 'allowedAnimalsEn',
-    additionalInfo: 'additionalInfoEn',
-  };
-
-  if (isEnglish && fieldMap[field]) {
-    const enField = fieldMap[field] as keyof TransportConditions;
-    const enValue = conditions[enField];
-    // Fallback to Russian if English not available
-    return enValue || conditions[field];
-  }
-
-  return conditions[field];
+  const value = conditions[field];
+  return getLocalizedValue(value as any, language);
 }

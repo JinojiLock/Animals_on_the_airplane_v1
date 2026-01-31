@@ -99,7 +99,7 @@ const AirlineDetailPage: React.FC = () => {
         title={seoTitle}
         description={seoDescription}
         keywords={`${airline.name}, ${t('airline.petTransport')}, ${airline.transportMethods.map(m => transportMethodConfig[m].label).join(', ')}`}
-        canonical={`/airline/${airline.id}`}
+        canonicalUrl={`/airline/${airline.id}`}
         ogType="article"
         schema={getAirlineSchema(airline, i18n.language)}
       />

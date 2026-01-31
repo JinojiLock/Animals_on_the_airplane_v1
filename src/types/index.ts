@@ -1,29 +1,31 @@
 // Способ перевозки животного
 export type TransportMethod = 'cargo' | 'baggage' | 'cabin';
 
-// Интерфейс для условий перевозки
-export interface TransportConditions {
-  maxCarrierSize?: string; // Максимальный размер переноски
-  maxWeight?: string; // Максимальный вес
-  allowedAnimals?: string[]; // Допустимые животные
-  additionalInfo?: string; // Дополнительная информация
-  // English fields
-  maxCarrierSizeEn?: string;
-  maxWeightEn?: string;
-  allowedAnimalsEn?: string[];
-  additionalInfoEn?: string;
+// Значение с поддержкой мультиязычности
+export type LocalizedValue = string | { ru?: string; en?: string };
+export type LocalizedArray = string[] | { ru?: string[]; en?: string[] };
+
+// Интерфейс для условий перевозки с поддержкой RU/EN
+export interface Conditions {
+  maxCarrierSize?: LocalizedValue;
+  maxWeight?: LocalizedValue;
+  allowedAnimals?: LocalizedArray;
+  additionalInfo?: LocalizedValue;
 }
+
+// Интерфейс для условий перевозки (старое название для обратной совместимости)
+export type TransportConditions = Conditions;
 
 // Интерфейс для авиакомпании
 export interface Airline {
   id: string;
   name: string;
-  logo?: string;
-  transportMethods: TransportMethod[]; // Доступные способы перевозки
+  logo: string;
+  transportMethods: TransportMethod[];
   conditions: {
-    [key in TransportMethod]?: TransportConditions;
+    [key in TransportMethod]?: Conditions;
   };
-  rulesUrl: string; // Ссылка на правила авиакомпании
+  rulesUrl: string;
 }
 
 // Интерфейс для фильтров
