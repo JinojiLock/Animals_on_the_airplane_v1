@@ -99,6 +99,50 @@ export function AdminPanel() {
     }
   };
 
+  // Translate all untranslated airlines (max 50)
+  const handleTranslateAll = async () => {
+    const untranslated = airlines.filter(a => !isTranslated(a));
+    
+    if (untranslated.length === 0) {
+      alert('Все авиакомпании уже переведены! ✅');
+      return;
+    }
+
+    const toTranslate = untranslated.slice(0, 50);
+    const remaining = untranslated.length - toTranslate.length;
+
+    const message = remaining > 0
+      ? `Перевести ${toTranslate.length} непереведённых авиакомпаний?\n\nОстанется ещё ${remaining} для следующего раза.\n(Макс. 50 за раз)`
+      : `Перевести все ${toTranslate.length} непереведённых авиакомпаний?`;
+
+    if (!confirm(message)) {
+      return;
+    }
+
+    setTranslating('bulk');
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const airline of toTranslate) {
+      try {
+        await ApiService.translateAirline(airline.id);
+        successCount++;
+      } catch (err) {
+        console.error(`Failed to translate ${airline.name}:`, err);
+        errorCount++;
+      }
+    }
+
+    await loadAirlines();
+    setTranslating(null);
+
+    if (errorCount === 0) {
+      alert(`✅ Успешно переведено: ${successCount} авиакомпаний! 🎉`);
+    } else {
+      alert(`Переведено: ${successCount}\nОшибок: ${errorCount}\n\nПроверьте консоль для деталей.`);
+    }
+  };
+
   if (viewMode === 'create') {
     return (
       <>
@@ -148,23 +192,48 @@ export function AdminPanel() {
         <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">🛠 Админ панель</h1>
               <p className="text-gray-600 mt-1">Управление авиакомпаниями</p>
             </div>
-            <button
-              onClick={() => setViewMode('create')}
-              className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
-            >
-              <span className="text-xl">+</span>
-              Добавить авиакомпанию
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={handleTranslateAll}
+                disabled={translating === 'bulk' || airlines.filter(a => !isTranslated(a)).length === 0}
+                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-md transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Перевести все непереведённые авиакомпании (макс 50 за раз)"
+              >
+                {translating === 'bulk' ? (
+                  <>
+                    <span className="animate-spin">⏳</span>
+                    <span>Перевод...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>🌐</span>
+                    <span>Перевести все</span>
+                    {airlines.filter(a => !isTranslated(a)).length > 0 && (
+                      <span className="bg-purple-800 px-2 py-0.5 rounded-full text-xs">
+                        {Math.min(airlines.filter(a => !isTranslated(a)).length, 50)}
+                      </span>
+                    )}
+                  </>
+                )}
+              </button>
+              <button
+                onClick={() => setViewMode('create')}
+                className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
+              >
+                <span className="text-xl">+</span>
+                Добавить авиакомпанию
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="text-gray-600 text-sm mb-1">Всего авиакомпаний</div>
             <div className="text-3xl font-bold text-blue-600">{airlines.length}</div>
@@ -173,6 +242,12 @@ export function AdminPanel() {
             <div className="text-gray-600 text-sm mb-1">С перевозкой в салоне</div>
             <div className="text-3xl font-bold text-green-600">
               {airlines.filter(a => a.transportMethods.includes('cabin')).length}
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6">
+            <div className="text-gray-600 text-sm mb-1">С перевозкой в багаже</div>
+            <div className="text-3xl font-bold text-orange-600">
+              {airlines.filter(a => a.transportMethods.includes('baggage')).length}
             </div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
