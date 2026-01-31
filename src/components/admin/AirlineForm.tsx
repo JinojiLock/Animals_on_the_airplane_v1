@@ -139,8 +139,27 @@ export function AirlineForm({ airline, onSubmit, onCancel }: AirlineFormProps) {
 
     setLoading(true);
 
+    // Trim all string values before submitting
+    const trimmedFormData = {
+      ...formData,
+      id: formData.id.trim(),
+      name: formData.name.trim(),
+      rulesUrl: formData.rulesUrl?.trim(),
+      conditions: Object.fromEntries(
+        Object.entries(formData.conditions).map(([method, cond]) => [
+          method,
+          {
+            maxCarrierSize: typeof cond?.maxCarrierSize === 'string' ? cond.maxCarrierSize.trim() : cond?.maxCarrierSize,
+            maxWeight: typeof cond?.maxWeight === 'string' ? cond.maxWeight.trim() : cond?.maxWeight,
+            allowedAnimals: cond?.allowedAnimals?.map((a: string) => a.trim()).filter(Boolean),
+            additionalInfo: typeof cond?.additionalInfo === 'string' ? cond.additionalInfo.trim() : cond?.additionalInfo,
+          }
+        ])
+      )
+    };
+
     try {
-      await onSubmit(formData);
+      await onSubmit(trimmedFormData);
     } catch (err) {
       console.error('Form submission error:', err);
       
@@ -358,8 +377,7 @@ export function AirlineForm({ airline, onSubmit, onCancel }: AirlineFormProps) {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Допустимые животные (через запятую)
               </label>
-              <input
-                type="text"
+              <textarea
                 value={formData.conditions[method]?.allowedAnimals?.join(', ') || ''}
                 onChange={e => {
                   handleConditionChange(
@@ -370,6 +388,7 @@ export function AirlineForm({ airline, onSubmit, onCancel }: AirlineFormProps) {
                   setValidationErrors(prev => ({ ...prev, [`conditions_${method}`]: '' }));
                 }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rows={2}
                 placeholder="собаки, кошки, птицы"
               />
               <p className="text-xs text-gray-500 mt-1">Перечислите животных через запятую</p>

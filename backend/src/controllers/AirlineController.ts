@@ -71,14 +71,18 @@ export class AirlineController {
           const conditions: any = {};
           conditionsResult.rows.forEach((cond) => {
             conditions[cond.transport_method] = {
-              maxCarrierSize: cond.maxCarrierSize,
-              maxWeight: cond.maxWeight,
-              allowedAnimals: cond.allowedAnimals,
-              additionalInfo: cond.additionalInfo,
-              maxCarrierSizeEn: cond.maxCarrierSizeEn,
-              maxWeightEn: cond.maxWeightEn,
-              allowedAnimalsEn: cond.allowedAnimalsEn,
-              additionalInfoEn: cond.additionalInfoEn,
+              maxCarrierSize: cond.maxCarrierSizeEn 
+                ? { ru: cond.maxCarrierSize, en: cond.maxCarrierSizeEn }
+                : cond.maxCarrierSize,
+              maxWeight: cond.maxWeightEn
+                ? { ru: cond.maxWeight, en: cond.maxWeightEn }
+                : cond.maxWeight,
+              allowedAnimals: cond.allowedAnimalsEn
+                ? { ru: cond.allowedAnimals, en: cond.allowedAnimalsEn }
+                : cond.allowedAnimals,
+              additionalInfo: cond.additionalInfoEn
+                ? { ru: cond.additionalInfo, en: cond.additionalInfoEn }
+                : cond.additionalInfo,
             };
           });
 
@@ -147,14 +151,18 @@ export class AirlineController {
       const conditions: any = {};
       conditionsResult.rows.forEach((cond) => {
         conditions[cond.transport_method] = {
-          maxCarrierSize: cond.maxCarrierSize,
-          maxWeight: cond.maxWeight,
-          allowedAnimals: cond.allowedAnimals,
-          additionalInfo: cond.additionalInfo,
-          maxCarrierSizeEn: cond.maxCarrierSizeEn,
-          maxWeightEn: cond.maxWeightEn,
-          allowedAnimalsEn: cond.allowedAnimalsEn,
-          additionalInfoEn: cond.additionalInfoEn,
+          maxCarrierSize: cond.maxCarrierSizeEn 
+            ? { ru: cond.maxCarrierSize, en: cond.maxCarrierSizeEn }
+            : cond.maxCarrierSize,
+          maxWeight: cond.maxWeightEn
+            ? { ru: cond.maxWeight, en: cond.maxWeightEn }
+            : cond.maxWeight,
+          allowedAnimals: cond.allowedAnimalsEn
+            ? { ru: cond.allowedAnimals, en: cond.allowedAnimalsEn }
+            : cond.allowedAnimals,
+          additionalInfo: cond.additionalInfoEn
+            ? { ru: cond.additionalInfo, en: cond.additionalInfoEn }
+            : cond.additionalInfo,
         };
       });
 
