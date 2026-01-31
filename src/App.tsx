@@ -13,7 +13,10 @@ import { initGA, initYM, trackPageView } from './utils/analytics';
 
 // Admin password from env or default
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123';
-const ADMIN_URL = import.meta.env.VITE_ADMIN_URL || '/admin';
+const ADMIN_URL = import.meta.env.VITE_ADMIN_URL || '/admin-secret-panel';
+
+// Block default /admin path for security
+const BLOCKED_ADMIN_PATH = '/admin';
 
 // Analytics initialization
 const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID;
@@ -72,6 +75,9 @@ function App() {
           <Route path="/terms" element={<TermsOfUsePage />} />
           
           {/* Admin routes */}
+          {/* Explicitly block /admin for security */}
+          <Route path={BLOCKED_ADMIN_PATH} element={<Navigate to="/" replace />} />
+          
           <Route
             path={ADMIN_URL}
             element={

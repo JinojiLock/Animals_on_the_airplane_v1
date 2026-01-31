@@ -1,12 +1,10 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 import ThemeSwitcher from './ThemeSwitcher';
 
 const Header: React.FC = () => {
-  const location = useLocation();
-  const isAdminPage = location.pathname.startsWith('/admin');
   const { t } = useTranslation();
 
   return (
@@ -28,16 +26,6 @@ const Header: React.FC = () => {
           <div className="flex items-center gap-3">
             <ThemeSwitcher />
             <LanguageSwitcher />
-            
-            {!isAdminPage && (
-              <Link
-                to="/admin"
-                className="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-md transition-colors flex items-center gap-2"
-              >
-                <span>🛠</span>
-                <span className="hidden md:inline">Admin</span>
-              </Link>
-            )}
           </div>
         </div>
       </div>
