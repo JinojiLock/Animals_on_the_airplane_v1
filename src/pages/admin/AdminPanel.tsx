@@ -13,6 +13,7 @@ export function AdminPanel() {
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [selectedAirline, setSelectedAirline] = useState<Airline | null>(null);
+  const [translating, setTranslating] = useState<string | null>(null); // ID of airline being translated
 
   // Load airlines
   useEffect(() => {
@@ -67,6 +68,23 @@ export function AdminPanel() {
   const handleCancel = () => {
     setViewMode('list');
     setSelectedAirline(null);
+  };
+
+  const handleTranslate = async (airlineId: string) => {
+    if (!confirm('Перевести условия перевозки на английский с помощью DeepL? Существующие английские переводы будут перезаписаны.')) {
+      return;
+    }
+
+    try {
+      setTranslating(airlineId);
+      await ApiService.translateAirline(airlineId);
+      await loadAirlines();
+      alert('Перевод успешно выполнен! 🎉');
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Ошибка перевода');
+    } finally {
+      setTranslating(null);
+    }
   };
 
   if (viewMode === 'create') {
@@ -220,6 +238,14 @@ export function AdminPanel() {
                     </td>
                     <td className="px-6 py-4 text-right text-sm font-medium">
                       <div className="flex flex-col sm:flex-row gap-2 justify-end">
+                        <button
+                          onClick={() => handleTranslate(airline.id)}
+                          disabled={translating === airline.id}
+                          className="text-purple-600 hover:text-purple-900 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Перевести на английский с помощью DeepL"
+                        >
+                          {translating === airline.id ? '⏳ Перевод...' : '🌐 Перевести'}
+                        </button>
                         <button
                           onClick={() => handleEdit(airline)}
                           className="text-blue-600 hover:text-blue-900 whitespace-nowrap"

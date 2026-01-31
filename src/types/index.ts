@@ -7,6 +7,11 @@ export interface TransportConditions {
   maxWeight?: string; // Максимальный вес
   allowedAnimals?: string[]; // Допустимые животные
   additionalInfo?: string; // Дополнительная информация
+  // English fields
+  maxCarrierSizeEn?: string;
+  maxWeightEn?: string;
+  allowedAnimalsEn?: string[];
+  additionalInfoEn?: string;
 }
 
 // Интерфейс для авиакомпании

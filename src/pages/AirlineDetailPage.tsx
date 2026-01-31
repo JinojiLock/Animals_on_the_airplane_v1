@@ -5,6 +5,7 @@ import type { Airline, TransportMethod } from '../types';
 import { ApiService } from '../services/ApiService';
 import SEO from '../components/SEO';
 import { getAirlineSchema } from '../utils/seoSchemas';
+import { getLocalizedValue } from '../utils/localization';
 
 const AirlineDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -202,46 +203,48 @@ const AirlineDetailPage: React.FC = () => {
                     {/* Accordion Content */}
                     {isOpen && conditions && (
                       <div className="px-6 pb-6 space-y-4 border-t border-gray-200 dark:border-gray-700 pt-4">
-                        {conditions.maxCarrierSize && (
+                        {getLocalizedValue(conditions.maxCarrierSize, i18n.language) && (
                           <div>
                             <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
                               {t('airline.maxCarrierSize')}:
                             </h3>
                             <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
-                              {conditions.maxCarrierSize}
+                              {getLocalizedValue(conditions.maxCarrierSize, i18n.language)}
                             </p>
                           </div>
                         )}
 
-                        {conditions.maxWeight && (
+                        {getLocalizedValue(conditions.maxWeight, i18n.language) && (
                           <div>
                             <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
                               {t('airline.maxWeight')}:
                             </h3>
                             <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
-                              {conditions.maxWeight}
+                              {getLocalizedValue(conditions.maxWeight, i18n.language)}
                             </p>
                           </div>
                         )}
 
-                        {conditions.allowedAnimals && conditions.allowedAnimals.length > 0 && (
+                        {getLocalizedValue(conditions.allowedAnimals, i18n.language) && (
                           <div>
                             <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
                               {t('airline.allowedAnimals')}:
                             </h3>
                             <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
-                              {conditions.allowedAnimals.join(', ')}
+                              {Array.isArray(getLocalizedValue(conditions.allowedAnimals, i18n.language))
+                                ? (getLocalizedValue(conditions.allowedAnimals, i18n.language) as string[]).join(', ')
+                                : getLocalizedValue(conditions.allowedAnimals, i18n.language)}
                             </p>
                           </div>
                         )}
 
-                        {conditions.additionalInfo && (
+                        {getLocalizedValue(conditions.additionalInfo, i18n.language) && (
                           <div>
                             <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
                               {t('airline.additionalInfo')}:
                             </h3>
                             <p className="text-gray-600 dark:text-gray-400 break-words whitespace-pre-wrap">
-                              {conditions.additionalInfo}
+                              {getLocalizedValue(conditions.additionalInfo, i18n.language)}
                             </p>
                           </div>
                         )}

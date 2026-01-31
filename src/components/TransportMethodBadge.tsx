@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TransportMethod, Conditions } from '../types';
+import { getLocalizedCondition } from '../utils/localization';
 
 interface TransportMethodBadgeProps {
   method: TransportMethod;
@@ -8,7 +9,7 @@ interface TransportMethodBadgeProps {
 }
 
 const TransportMethodBadge: React.FC<TransportMethodBadgeProps> = ({ method, conditions }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showTooltip, setShowTooltip] = useState(false);
 
   const transportMethodLabels: Record<TransportMethod, string> = {
@@ -53,51 +54,62 @@ const TransportMethodBadge: React.FC<TransportMethodBadgeProps> = ({ method, con
 
           {/* Детали */}
           <div className="space-y-3 text-sm max-h-96 overflow-y-auto">
-            {conditions?.maxCarrierSize && (
-              <div>
-                <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
-                  {t('airline.maxCarrierSize')}:
-                </span>
-                <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
-                  {conditions.maxCarrierSize}
-                </p>
-              </div>
-            )}
+            {(() => {
+              const maxCarrierSize = getLocalizedCondition(conditions, 'maxCarrierSize', i18n.language) as string | undefined;
+              const maxWeight = getLocalizedCondition(conditions, 'maxWeight', i18n.language) as string | undefined;
+              const allowedAnimals = getLocalizedCondition(conditions, 'allowedAnimals', i18n.language) as string[] | undefined;
+              const additionalInfo = getLocalizedCondition(conditions, 'additionalInfo', i18n.language) as string | undefined;
 
-            {conditions?.maxWeight && (
-              <div>
-                <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
-                  {t('airline.maxWeight')}:
-                </span>
-                <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
-                  {conditions.maxWeight}
-                </p>
-              </div>
-            )}
+              return (
+                <>
+                  {maxCarrierSize && (
+                    <div>
+                      <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
+                        {t('airline.maxCarrierSize')}:
+                      </span>
+                      <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
+                        {maxCarrierSize}
+                      </p>
+                    </div>
+                  )}
 
-            {conditions?.allowedAnimals && conditions.allowedAnimals.length > 0 && (
-              <div>
-                <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
-                  {t('airline.allowedAnimals')}:
-                </span>
-                <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
-                  {conditions.allowedAnimals.join(', ')}
-                </p>
-              </div>
-            )}
+                  {maxWeight && (
+                    <div>
+                      <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
+                        {t('airline.maxWeight')}:
+                      </span>
+                      <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
+                        {maxWeight}
+                      </p>
+                    </div>
+                  )}
 
-            {conditions?.additionalInfo && (
-              <div>
-                <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
-                  {t('airline.additionalInfo')}:
-                </span>
-                <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
-                  {conditions.additionalInfo.length > 100
-                    ? `${conditions.additionalInfo.substring(0, 100)}...`
-                    : conditions.additionalInfo}
-                </p>
-              </div>
-            )}
+                  {allowedAnimals && allowedAnimals.length > 0 && (
+                    <div>
+                      <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
+                        {t('airline.allowedAnimals')}:
+                      </span>
+                      <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
+                        {allowedAnimals.join(', ')}
+                      </p>
+                    </div>
+                  )}
+
+                  {additionalInfo && (
+                    <div>
+                      <span className="font-semibold text-gray-700 dark:text-gray-300 block mb-1">
+                        {t('airline.additionalInfo')}:
+                      </span>
+                      <p className="text-gray-600 dark:text-gray-400 break-words whitespace-normal">
+                        {additionalInfo.length > 100
+                          ? `${additionalInfo.substring(0, 100)}...`
+                          : additionalInfo}
+                      </p>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </div>
       )}
