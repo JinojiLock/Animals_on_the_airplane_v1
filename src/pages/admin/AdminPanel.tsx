@@ -69,6 +69,19 @@ export function AdminPanel() {
     setSelectedAirline(null);
   };
 
+  // Check if airline has English translations
+  const isTranslated = (airline: Airline): boolean => {
+    return Object.values(airline.conditions).some(cond => {
+      if (!cond) return false;
+      return (
+        (typeof cond.maxCarrierSize === 'object' && cond.maxCarrierSize?.en) ||
+        (typeof cond.maxWeight === 'object' && cond.maxWeight?.en) ||
+        (typeof cond.allowedAnimals === 'object' && cond.allowedAnimals?.en) ||
+        (typeof cond.additionalInfo === 'object' && cond.additionalInfo?.en)
+      );
+    });
+  };
+
   const handleTranslate = async (airlineId: string) => {
     if (!confirm('Перевести условия перевозки на английский с помощью DeepL? Существующие английские переводы будут перезаписаны.')) {
       return;
@@ -189,13 +202,16 @@ export function AdminPanel() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
                     Авиакомпания
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">
                     Способы перевозки
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/6">
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-24">
+                    Переведена
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
                     ID
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-1/4">
@@ -229,6 +245,13 @@ export function AdminPanel() {
                           </span>
                         ))}
                       </div>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                      {isTranslated(airline) ? (
+                        <span className="text-2xl text-green-600" title="Переведена на английский">✓</span>
+                      ) : (
+                        <span className="text-2xl text-gray-300" title="Не переведена">✗</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
                       <div className="break-words max-w-[150px]">

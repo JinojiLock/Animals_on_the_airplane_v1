@@ -31,7 +31,32 @@ export function AirlineForm({ airline, onSubmit, onCancel }: AirlineFormProps) {
 
   useEffect(() => {
     if (airline) {
-      setFormData(airline);
+      // Normalize conditions: extract 'ru' values for editing
+      const normalizedConditions: any = {};
+      
+      Object.entries(airline.conditions).forEach(([method, cond]) => {
+        if (cond) {
+          normalizedConditions[method] = {
+            maxCarrierSize: typeof cond.maxCarrierSize === 'object' && cond.maxCarrierSize?.ru 
+              ? cond.maxCarrierSize.ru 
+              : cond.maxCarrierSize,
+            maxWeight: typeof cond.maxWeight === 'object' && cond.maxWeight?.ru
+              ? cond.maxWeight.ru
+              : cond.maxWeight,
+            allowedAnimals: typeof cond.allowedAnimals === 'object' && cond.allowedAnimals?.ru
+              ? cond.allowedAnimals.ru
+              : cond.allowedAnimals,
+            additionalInfo: typeof cond.additionalInfo === 'object' && cond.additionalInfo?.ru
+              ? cond.additionalInfo.ru
+              : cond.additionalInfo,
+          };
+        }
+      });
+
+      setFormData({
+        ...airline,
+        conditions: normalizedConditions,
+      });
     }
   }, [airline]);
 
