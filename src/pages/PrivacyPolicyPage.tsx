@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import ContactForm from '../components/ContactForm';
 
 const PrivacyPolicyPage: React.FC = () => {
   const { t } = useTranslation();
+  const [showContactForm, setShowContactForm] = useState(false);
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -186,17 +188,18 @@ const PrivacyPolicyPage: React.FC = () => {
           <section className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-6 text-center text-white">
             <h2 className="text-2xl font-bold mb-2">{t('privacy.contact.title')}</h2>
             <p className="mb-4 text-blue-50">{t('privacy.contact.description')}</p>
-            <a
-              href="#contact"
-              className="inline-block bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+            <button
+              onClick={() => setShowContactForm(true)}
+              className="inline-block bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors cursor-pointer"
             >
               {t('privacy.contact.button')}
-            </a>
+            </button>
           </section>
         </div>
       </main>
 
       <Footer />
+      {showContactForm && <ContactForm onClose={() => setShowContactForm(false)} />}
     </div>
   );
 };

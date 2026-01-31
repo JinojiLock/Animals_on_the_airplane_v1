@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ContactForm from './ContactForm';
 
@@ -15,31 +16,42 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-semibold mb-3 flex items-center">
               <span className="mr-2">🐾</span>
-              {t('footer.about')}
+              {t('common.appName')}
             </h3>
-            <p className="text-gray-300 dark:text-gray-400 text-sm">
-              {t('header.title')}. {t('header.subtitle')}.
+            <p className="text-gray-300 dark:text-gray-400 text-sm mb-3">
+              {t('header.subtitle')}
             </p>
+            <Link 
+              to="/about" 
+              className="text-blue-400 hover:text-blue-300 dark:hover:text-blue-200 transition-colors text-sm"
+            >
+              {t('footer.about')} →
+            </Link>
           </div>
 
           {/* Полезные ссылки */}
           <div>
-            <h3 className="text-lg font-semibold mb-3">{t('footer.faq')}</h3>
+            <h3 className="text-lg font-semibold mb-3">Полезные ссылки</h3>
             <ul className="text-gray-300 dark:text-gray-400 text-sm space-y-2">
               <li>
-                <span className="hover:text-blue-400 dark:hover:text-blue-300 transition-colors cursor-pointer">
-                  • How to prepare your pet for flight
-                </span>
+                <Link to="/faq" className="hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                  • {t('footer.faq')}
+                </Link>
               </li>
               <li>
-                <span className="hover:text-blue-400 dark:hover:text-blue-300 transition-colors cursor-pointer">
-                  • Required documents
-                </span>
+                <Link to="/about" className="hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                  • {t('footer.about')}
+                </Link>
               </li>
               <li>
-                <span className="hover:text-blue-400 dark:hover:text-blue-300 transition-colors cursor-pointer">
-                  • Choosing a carrier
-                </span>
+                <Link to="/privacy" className="hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                  • {t('footer.privacyPolicy')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
+                  • {t('footer.termsOfUse')}
+                </Link>
               </li>
             </ul>
           </div>
@@ -72,25 +84,6 @@ const Footer: React.FC = () => {
             <p className="text-gray-300 dark:text-gray-400 text-sm">
               {t('footer.disclaimerText')}
             </p>
-          </div>
-
-          {/* Legal Links */}
-          <div className="flex flex-wrap justify-center gap-4 mb-4 text-sm">
-            <a href="/privacy-policy" className="text-gray-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
-              {t('footer.privacyPolicy')}
-            </a>
-            <span className="text-gray-600">•</span>
-            <a href="/terms-of-use" className="text-gray-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
-              {t('footer.termsOfUse')}
-            </a>
-            <span className="text-gray-600">•</span>
-            <a href="/about" className="text-gray-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
-              {t('footer.about')}
-            </a>
-            <span className="text-gray-600">•</span>
-            <a href="/faq" className="text-gray-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors">
-              {t('footer.faq')}
-            </a>
           </div>
 
           {/* Copyright */}
