@@ -18,6 +18,15 @@ const ADMIN_URL = import.meta.env.VITE_ADMIN_URL || '/admin-secret-panel';
 // Block default /admin path for security
 const BLOCKED_ADMIN_PATH = '/admin';
 
+// Debug logging (remove in production)
+if (import.meta.env.DEV) {
+  console.log('🔒 Admin configuration:', {
+    ADMIN_URL,
+    ADMIN_PASSWORD: ADMIN_PASSWORD ? '✓ Set' : '✗ Not set',
+    ENV_LOADED: import.meta.env.VITE_ADMIN_URL ? '✓ Yes' : '✗ No (using default)'
+  });
+}
+
 // Analytics initialization
 const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID;
 const YM_COUNTER_ID = import.meta.env.VITE_YM_COUNTER_ID;
