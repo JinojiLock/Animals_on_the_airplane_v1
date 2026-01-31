@@ -44,4 +44,11 @@ router.put('/:id', AirlineController.update);
  */
 router.delete('/:id', AirlineController.delete);
 
+/**
+ * @route   POST /api/airlines/:id/translate
+ * @desc    Auto-translate airline conditions to English using DeepL
+ * @access  Admin only (will add auth later)
+ */
+router.post('/:id/translate', AirlineController.translateConditions);
+
 export default router;

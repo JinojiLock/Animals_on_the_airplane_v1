@@ -18,6 +18,11 @@ export interface TransportConditions {
   maxWeight?: string;
   allowedAnimals?: string[];
   additionalInfo?: string;
+  // English fields
+  maxCarrierSizeEn?: string;
+  maxWeightEn?: string;
+  allowedAnimalsEn?: string[];
+  additionalInfoEn?: string;
 }
 
 export interface AirlineFilters {

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import pool from '../config/database.js';
 import { Airline, TransportMethod, TransportConditions } from '../models/Airline.js';
+import { TranslationService } from '../services/TranslationService.js';
 
 export class AirlineController {
   /**
@@ -57,7 +58,11 @@ export class AirlineController {
               max_carrier_size as "maxCarrierSize",
               max_weight as "maxWeight",
               allowed_animals as "allowedAnimals",
-              additional_info as "additionalInfo"
+              additional_info as "additionalInfo",
+              max_carrier_size_en as "maxCarrierSizeEn",
+              max_weight_en as "maxWeightEn",
+              allowed_animals_en as "allowedAnimalsEn",
+              additional_info_en as "additionalInfoEn"
             FROM conditions
             WHERE airline_id = $1`,
             [row.id]
@@ -70,6 +75,10 @@ export class AirlineController {
               maxWeight: cond.maxWeight,
               allowedAnimals: cond.allowedAnimals,
               additionalInfo: cond.additionalInfo,
+              maxCarrierSizeEn: cond.maxCarrierSizeEn,
+              maxWeightEn: cond.maxWeightEn,
+              allowedAnimalsEn: cond.allowedAnimalsEn,
+              additionalInfoEn: cond.additionalInfoEn,
             };
           });
 
@@ -125,7 +134,11 @@ export class AirlineController {
           max_carrier_size as "maxCarrierSize",
           max_weight as "maxWeight",
           allowed_animals as "allowedAnimals",
-          additional_info as "additionalInfo"
+          additional_info as "additionalInfo",
+          max_carrier_size_en as "maxCarrierSizeEn",
+          max_weight_en as "maxWeightEn",
+          allowed_animals_en as "allowedAnimalsEn",
+          additional_info_en as "additionalInfoEn"
         FROM conditions
         WHERE airline_id = $1`,
         [id]
@@ -138,6 +151,10 @@ export class AirlineController {
           maxWeight: cond.maxWeight,
           allowedAnimals: cond.allowedAnimals,
           additionalInfo: cond.additionalInfo,
+          maxCarrierSizeEn: cond.maxCarrierSizeEn,
+          maxWeightEn: cond.maxWeightEn,
+          allowedAnimalsEn: cond.allowedAnimalsEn,
+          additionalInfoEn: cond.additionalInfoEn,
         };
       });
 
@@ -224,15 +241,20 @@ export class AirlineController {
           const cond = condition as TransportConditions;
           await client.query(
             `INSERT INTO conditions 
-             (airline_id, transport_method, max_carrier_size, max_weight, allowed_animals, additional_info) 
-             VALUES ($1, $2, $3, $4, $5, $6)`,
+             (airline_id, transport_method, max_carrier_size, max_weight, allowed_animals, additional_info,
+              max_carrier_size_en, max_weight_en, allowed_animals_en, additional_info_en) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
             [
               id,
               method,
               cond.maxCarrierSize || null,
               cond.maxWeight || null,
               cond.allowedAnimals || null,
-              cond.additionalInfo || null
+              cond.additionalInfo || null,
+              cond.maxCarrierSizeEn || null,
+              cond.maxWeightEn || null,
+              cond.allowedAnimalsEn || null,
+              cond.additionalInfoEn || null
             ]
           );
         }
@@ -307,15 +329,20 @@ export class AirlineController {
           const cond = condition as TransportConditions;
           await client.query(
             `INSERT INTO conditions 
-             (airline_id, transport_method, max_carrier_size, max_weight, allowed_animals, additional_info) 
-             VALUES ($1, $2, $3, $4, $5, $6)`,
+             (airline_id, transport_method, max_carrier_size, max_weight, allowed_animals, additional_info,
+              max_carrier_size_en, max_weight_en, allowed_animals_en, additional_info_en) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
             [
               id,
               method,
               cond.maxCarrierSize || null,
               cond.maxWeight || null,
               cond.allowedAnimals || null,
-              cond.additionalInfo || null
+              cond.additionalInfo || null,
+              cond.maxCarrierSizeEn || null,
+              cond.maxWeightEn || null,
+              cond.allowedAnimalsEn || null,
+              cond.additionalInfoEn || null
             ]
           );
         }
@@ -388,7 +415,11 @@ export class AirlineController {
         max_carrier_size as "maxCarrierSize",
         max_weight as "maxWeight",
         allowed_animals as "allowedAnimals",
-        additional_info as "additionalInfo"
+        additional_info as "additionalInfo",
+        max_carrier_size_en as "maxCarrierSizeEn",
+        max_weight_en as "maxWeightEn",
+        allowed_animals_en as "allowedAnimalsEn",
+        additional_info_en as "additionalInfoEn"
       FROM conditions
       WHERE airline_id = $1`,
       [id]
@@ -401,6 +432,10 @@ export class AirlineController {
         maxWeight: cond.maxWeight,
         allowedAnimals: cond.allowedAnimals,
         additionalInfo: cond.additionalInfo,
+        maxCarrierSizeEn: cond.maxCarrierSizeEn,
+        maxWeightEn: cond.maxWeightEn,
+        allowedAnimalsEn: cond.allowedAnimalsEn,
+        additionalInfoEn: cond.additionalInfoEn,
       };
     });
 
@@ -412,5 +447,103 @@ export class AirlineController {
       conditions,
       rulesUrl: row.rulesUrl,
     };
+  }
+
+  /**
+   * Auto-translate airline conditions to English
+   */
+  static async translateConditions(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+
+      // Check DeepL status
+      const status = await TranslationService.checkStatus();
+      if (!status.available) {
+        res.status(503).json({ 
+          error: 'Translation service unavailable', 
+          message: status.message 
+        });
+        return;
+      }
+
+      const client = await pool.connect();
+
+      try {
+        await client.query('BEGIN');
+
+        // Fetch conditions
+        const conditionsResult = await client.query(
+          `SELECT id, max_carrier_size, max_weight, allowed_animals, additional_info
+           FROM conditions
+           WHERE airline_id = $1`,
+          [id]
+        );
+
+        if (conditionsResult.rows.length === 0) {
+          res.status(404).json({ error: 'No conditions found for this airline' });
+          await client.query('ROLLBACK');
+          return;
+        }
+
+        // Translate each condition
+        for (const condition of conditionsResult.rows) {
+          const translations: any = {};
+
+          // Translate each field if it exists
+          if (condition.max_carrier_size) {
+            translations.maxCarrierSizeEn = await TranslationService.translateToEnglish(condition.max_carrier_size);
+          }
+
+          if (condition.max_weight) {
+            translations.maxWeightEn = await TranslationService.translateToEnglish(condition.max_weight);
+          }
+
+          if (condition.allowed_animals && condition.allowed_animals.length > 0) {
+            translations.allowedAnimalsEn = await TranslationService.translateArray(condition.allowed_animals);
+          }
+
+          if (condition.additional_info) {
+            translations.additionalInfoEn = await TranslationService.translateToEnglish(condition.additional_info);
+          }
+
+          // Update database
+          await client.query(
+            `UPDATE conditions
+             SET max_carrier_size_en = $1,
+                 max_weight_en = $2,
+                 allowed_animals_en = $3,
+                 additional_info_en = $4
+             WHERE id = $5`,
+            [
+              translations.maxCarrierSizeEn || null,
+              translations.maxWeightEn || null,
+              translations.allowedAnimalsEn || null,
+              translations.additionalInfoEn || null,
+              condition.id
+            ]
+          );
+        }
+
+        await client.query('COMMIT');
+
+        res.json({ 
+          message: 'Conditions translated successfully',
+          translated: conditionsResult.rows.length
+        });
+
+        console.log(`✅ Translated ${conditionsResult.rows.length} conditions for airline: ${id}`);
+      } catch (error) {
+        await client.query('ROLLBACK');
+        throw error;
+      } finally {
+        client.release();
+      }
+    } catch (error) {
+      console.error('Error translating conditions:', error);
+      res.status(500).json({ 
+        error: 'Translation failed', 
+        message: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
   }
 }
