@@ -100,5 +100,309 @@
     "keep": "Keep",
     "russian": "Русский",
     "english": "English"
+  },
+  "faq": {
+    "pageTitle": "FAQ | AirPets",
+    "pageDescription": "Frequently asked questions about pet travel and using AirPets",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Answers to popular questions about the site and pet transportation",
+    "categories": {
+      "about": "About the Site",
+      "usage": "How to Use",
+      "understanding": "Understanding Information",
+      "general": "About Pet Travel",
+      "help": "Help"
+    },
+    "whatIsAirPets": {
+      "question": "What is AirPets?",
+      "answer": "AirPets is a free directory for pet transportation by air. We collect and organize information about pet travel rules of various airlines to help you plan trips with your beloved pets."
+    },
+    "isFree": {
+      "question": "Is the site free to use?",
+      "answer": "Yes, AirPets is completely free. We don't charge for access to information and don't require registration."
+    },
+    "dataSource": {
+      "question": "Where does the data come from?",
+      "answer": "We collect information from official airline websites and regularly update it. Each airline card contains a link to the official rules."
+    },
+    "dataAccuracy": {
+      "question": "How accurate is the data?",
+      "answer": "We strive to keep the data up-to-date, but airlines may change their rules. We recommend always checking the information on the airline's official website before purchasing a ticket."
+    },
+    "howToSearch": {
+      "question": "How do I find the airline I need?",
+      "answer": "Use the search bar to enter the airline name. You can also apply filters by transportation method: In Cabin, In Baggage, Cargo."
+    },
+    "whatAreBadges": {
+      "question": "What do Cabin/Baggage/Cargo badges mean?",
+      "answer": "Badges show available transportation methods:\n• Cabin (✈️) — pet flies with you in the cabin\n• Baggage (🧳) — pet in the baggage compartment\n• Cargo (📦) — separate cargo transportation\n\nHover over the badge to see detailed conditions."
+    },
+    "howToSwitchLanguage": {
+      "question": "How do I switch language?",
+      "answer": "Click the RU/EN button in the top right corner. The site supports Russian and English languages."
+    },
+    "airlineNotFound": {
+      "question": "Can't find my airline, what should I do?",
+      "answer": "Contact us through the feedback form at the bottom of the page. Specify the airline name and we'll try to add it to the database."
+    },
+    "canPrint": {
+      "question": "Can I print the information?",
+      "answer": "Yes, open the airline's page (\"View Details\" button) and use your browser's print function (Ctrl+P)."
+    },
+    "whatIsCabin": {
+      "question": "What is \"In Cabin\" transportation?",
+      "answer": "This is when your pet flies with you in the passenger cabin in a special carrier under the front seat. Usually allowed for small animals (up to 8 kg including carrier)."
+    },
+    "whatIsBaggage": {
+      "question": "What is \"In Baggage\" transportation?",
+      "answer": "The animal is transported in the baggage compartment in a special container. Suitable for medium and large animals that don't fit in the cabin."
+    },
+    "whatIsCargo": {
+      "question": "What is \"Cargo\" transportation?",
+      "answer": "This is cargo transportation for large animals or multiple pets. Booked separately from the passenger ticket through the airline's cargo service."
+    },
+    "carrierSize": {
+      "question": "What does \"Carrier Size\" mean?",
+      "answer": "These are the maximum dimensions of the carrier/container for the animal in the format: length × width × height (e.g., 55×40×25 cm). The carrier must fit under the front seat."
+    },
+    "needToPay": {
+      "question": "Do I need to pay for pet transportation?",
+      "answer": "Yes, most airlines charge an additional fee for pet transportation. Check the cost and payment rules when booking a ticket or on the airline's website."
+    },
+    "whatDocuments": {
+      "question": "What documents are needed for pet transportation?",
+      "answer": "Usually required:\n• Veterinary passport\n• Health certificate (form №1)\n• Vaccination certificate (especially rabies)\n• For international flights: international veterinary certificate\n\nRequirements may differ depending on the destination country."
+    },
+    "howToPrepare": {
+      "question": "How to prepare a pet for flight?",
+      "answer": "Recommendations:\n• Get your pet used to the carrier in advance\n• Don't feed 3-4 hours before the flight\n• Bring water and absorbent pad\n• Attach a tag with contacts to the carrier\n• Consult with a vet about sedatives"
+    },
+    "canBringMultiple": {
+      "question": "Can I fly with multiple pets?",
+      "answer": "Rules vary by airline. Usually 1 animal per passenger is allowed in the cabin. For multiple pets, cargo transportation may be required. Check with the airline."
+    },
+    "wrongData": {
+      "question": "I found inaccurate data, what should I do?",
+      "answer": "Contact us through the feedback form, specifying the airline name and what information is incorrect. We'll verify and update the data."
+    },
+    "addAirline": {
+      "question": "I want to add an airline to the database",
+      "answer": "Great! Contact us through the feedback form, specify the airline name and link to official pet travel rules. We'll add it soon."
+    },
+    "siteIssue": {
+      "question": "I have a problem with the site",
+      "answer": "Describe the problem in the feedback form: what exactly doesn't work, which browser you're using, attach a screenshot if possible. We'll try to help."
+    },
+    "contactTeam": {
+      "question": "How to contact the AirPets team?",
+      "answer": "Use the feedback form at the bottom of the main page. We respond to all messages within 1-2 business days."
+    },
+    "stillHaveQuestions": "Still have questions?",
+    "contactUs": "Contact us through the feedback form",
+    "contactButton": "Contact Us"
+  },
+  "about": {
+    "pageTitle": "About",
+    "metaDescription": "AirPets is a free airline pet travel directory. Learn about our mission to help you travel with your pets.",
+    "title": "About AirPets",
+    "subtitle": "Making travel with pets easier and safer",
+    "mission": {
+      "title": "Our Mission",
+      "description": "To help pet owners easily find and compare pet transport rules across different airlines. We believe every pet deserves safe and comfortable travel with their owner."
+    },
+    "problem": {
+      "title": "The Problem We Solve",
+      "description": "Planning travel with a pet is stressful. Airline rules are scattered across different websites, often contradictory and difficult to understand. Hours are spent searching for information about carrier sizes, weight limits, and allowed animals."
+    },
+    "solution": "AirPets collects all information in one place, making it clear and accessible in Russian and English.",
+    "features": {
+      "title": "What We Offer",
+      "search": {
+        "title": "Easy Search",
+        "description": "Quickly find airlines by name and filter by transport method"
+      },
+      "multilingual": {
+        "title": "Multilingual",
+        "description": "Interface and data available in Russian and English"
+      },
+      "detailed": {
+        "title": "Detailed Information",
+        "description": "Carrier sizes, weight limits, list of allowed animals, additional requirements"
+      },
+      "updated": {
+        "title": "Up-to-date Data",
+        "description": "Regularly updated information from official airline websites"
+      }
+    },
+    "values": {
+      "title": "Our Values",
+      "free": {
+        "title": "Free and Accessible",
+        "description": "AirPets is completely free. No hidden fees, subscriptions, or ads. Information is available to everyone."
+      },
+      "accurate": {
+        "title": "Data Accuracy",
+        "description": "We source information only from official sources and regularly verify its accuracy."
+      },
+      "transparent": {
+        "title": "Transparency",
+        "description": "Each card contains a link to the airline's official rules. We don't hide our sources."
+      }
+    },
+    "contact": {
+      "title": "Contact Us",
+      "description": "Have questions, suggestions, or found an error? We're always happy to hear from you!",
+      "button": "Get in Touch"
+    }
+  },
+  "privacy": {
+    "pageTitle": "Privacy Policy",
+    "metaDescription": "AirPets Privacy Policy. Learn what data we collect and how we use it.",
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated",
+    "intro": "AirPets respects your privacy. This policy explains what data we collect, how we use it, and what rights you have.",
+    "dataCollection": {
+      "title": "What Data We Collect",
+      "weDoNotCollect": {
+        "title": "❌ We DO NOT collect personal data:",
+        "names": "Names and surnames",
+        "emails": "Email addresses",
+        "phones": "Phone numbers",
+        "addresses": "Physical addresses",
+        "payment": "Payment information"
+      },
+      "weCollect": {
+        "title": "✅ We only collect technical data:",
+        "ip": "IP address (for statistics and abuse prevention)",
+        "browser": "Browser type and operating system",
+        "pages": "Pages visited on the site",
+        "duration": "Time spent on the site",
+        "source": "Referral source (where you came from)",
+        "language": "Preferred language"
+      }
+    },
+    "dataUsage": {
+      "title": "How We Use Data",
+      "improve": "Improving website functionality and user experience",
+      "analyze": "Analyzing airline and page popularity",
+      "ux": "Improving navigation and information search",
+      "bugs": "Identifying and fixing errors",
+      "stats": "Collecting general traffic statistics (without user identification)"
+    },
+    "cookies": {
+      "title": "Cookies and Tracking Technologies",
+      "analytics": {
+        "title": "Analytics Services:",
+        "ga": "Google Analytics — traffic and user behavior analysis",
+        "ym": "Yandex Metrika — statistics and session recordings"
+      },
+      "localStorage": {
+        "title": "LocalStorage (browser local storage):",
+        "language": "Saving selected language (RU/EN)",
+        "theme": "Saving theme preference (light/dark)",
+        "preferences": "Saving user preferences"
+      }
+    },
+    "rights": {
+      "title": "Your Rights",
+      "access": "Right to access information about what data we collect",
+      "delete": "Right to delete data (clear cookies and local storage)",
+      "optOut": "Right to opt-out of tracking through browser settings",
+      "doNotTrack": "Do Not Track (DNT) support — we respect this browser signal"
+    },
+    "security": {
+      "title": "Data Security",
+      "https": "All data is transmitted via secure HTTPS protocol",
+      "noSelling": "We do not sell or share your data with third parties",
+      "storage": "Data is stored in accordance with Russian and EU legislation (GDPR)",
+      "access": "Only site administrators have access to analytics data"
+    },
+    "thirdParty": {
+      "title": "Third-Party Services",
+      "description": "We use the following third-party services that may collect data:",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "changes": {
+      "title": "Changes to Policy",
+      "description": "We may update this privacy policy from time to time. The last update date is shown at the top of the page. By continuing to use the site after changes, you agree to the updated policy."
+    },
+    "contact": {
+      "title": "Questions About Privacy?",
+      "description": "If you have questions about how we handle data, contact us.",
+      "button": "Get in Touch"
+    }
+  },
+  "terms": {
+    "pageTitle": "Terms of Use",
+    "metaDescription": "AirPets Terms of Use. Rules, restrictions, and disclaimer of liability.",
+    "title": "Terms of Use",
+    "lastUpdated": "Last Updated",
+    "intro": "By using the AirPets website, you agree to these terms. Please read them carefully before using the service.",
+    "whatIsAirPets": {
+      "title": "What is AirPets",
+      "description": "AirPets is a free reference service providing information about pet transport rules of various airlines. The site is for informational purposes only.",
+      "warning": {
+        "title": "Important:",
+        "description": "AirPets is not an official representative of airlines and does not sell tickets. We do not guarantee 100% accuracy of data. Always verify information on the airline's official website before booking."
+      }
+    },
+    "acceptableUse": {
+      "title": "Acceptable Use",
+      "search": "Search for information about pet transport rules",
+      "compare": "Compare rules of different airlines",
+      "save": "Save information for personal use",
+      "share": "Share links to the site with source attribution"
+    },
+    "prohibited": {
+      "title": "Prohibited Activities",
+      "copy": "Copying site content without written permission",
+      "commercial": "Using information for commercial purposes without permission",
+      "attack": "Attempting to hack, DDoS attack, or other actions disrupting the site",
+      "spam": "Posting spam, malicious code, or illegal content",
+      "impersonate": "Impersonating AirPets or airline representatives",
+      "scraping": "Automated data collection (scraping) without permission"
+    },
+    "disclaimer": {
+      "title": "Disclaimer of Liability",
+      "weAreNotResponsible": {
+        "title": "We are NOT responsible for:",
+        "inaccuracy": "Inaccuracies in airline data (rules may change)",
+        "losses": "Financial or other losses from using the information",
+        "transportIssues": "Problems during pet transport (boarding denial, pet stress, etc.)",
+        "airlineActions": "Actions or inactions of airlines",
+        "outdatedInfo": "Outdated information (we recommend checking the airline's website)"
+      },
+      "youAreResponsible": {
+        "title": "You are responsible for:",
+        "verify": "Verifying current information on the airline's official website",
+        "documents": "Preparing all necessary documents for your pet",
+        "compliance": "Complying with airline rules and destination country legislation",
+        "petSafety": "Safety and comfort of your pet during travel"
+      }
+    },
+    "intellectualProperty": {
+      "title": "Intellectual Property",
+      "airlineData": "All airline rules data is the property of respective airlines",
+      "siteDesign": "Design, structure, and code of AirPets site are protected by copyright © AirPets 2025",
+      "logos": "Airline logos are the property of their owners",
+      "trademarks": "All trademarks belong to their lawful owners"
+    },
+    "modifications": {
+      "title": "Changes to Terms",
+      "description": "We reserve the right to modify these terms at any time. The last update date is shown at the top of the page. By continuing to use the site after changes, you agree to the updated terms."
+    },
+    "termination": {
+      "title": "Termination of Access",
+      "description": "We reserve the right to restrict or terminate your access to the site in case of violation of these terms of use or abuse."
+    },
+    "governingLaw": {
+      "title": "Governing Law",
+      "description": "These terms are governed by the laws of the Russian Federation. Any disputes are subject to consideration in the relevant courts of the Russian Federation."
+    },
+    "contact": {
+      "title": "Questions About Terms?",
+      "description": "If you have questions about the terms of use, contact us.",
+      "button": "Get in Touch"
+    }
   }
 }
