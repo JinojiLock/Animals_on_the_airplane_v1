@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Airline, TransportMethod, TransportConditions } from '../../types';
+import { ApiService } from '../../services/ApiService';
 
 interface AirlineFormProps {
   airline?: Airline;
@@ -28,27 +29,20 @@ export function AirlineForm({ airline, onSubmit, onCancel }: AirlineFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [translating, setTranslating] = useState(false);
 
   useEffect(() => {
     if (airline) {
-      // Normalize conditions: extract 'ru' values for editing
+      // Keep BOTH ru and en values when editing
       const normalizedConditions: any = {};
       
       Object.entries(airline.conditions).forEach(([method, cond]) => {
         if (cond) {
           normalizedConditions[method] = {
-            maxCarrierSize: typeof cond.maxCarrierSize === 'object' && cond.maxCarrierSize?.ru 
-              ? cond.maxCarrierSize.ru 
-              : cond.maxCarrierSize,
-            maxWeight: typeof cond.maxWeight === 'object' && cond.maxWeight?.ru
-              ? cond.maxWeight.ru
-              : cond.maxWeight,
-            allowedAnimals: typeof cond.allowedAnimals === 'object' && cond.allowedAnimals?.ru
-              ? cond.allowedAnimals.ru
-              : cond.allowedAnimals,
-            additionalInfo: typeof cond.additionalInfo === 'object' && cond.additionalInfo?.ru
-              ? cond.additionalInfo.ru
-              : cond.additionalInfo,
+            maxCarrierSize: cond.maxCarrierSize,
+            maxWeight: cond.maxWeight,
+            allowedAnimals: cond.allowedAnimals,
+            additionalInfo: cond.additionalInfo,
           };
         }
       });
@@ -188,6 +182,106 @@ export function AirlineForm({ airline, onSubmit, onCancel }: AirlineFormProps) {
     return lang === 'ru' ? value : '';
   };
 
+  // Translate all Russian fields to English using DeepL
+  const handleTranslateInForm = async () => {
+    // Validate that we have an ID and Russian content
+    if (!formData.id.trim()) {
+      alert('Сначала заполните ID авиакомпании');
+      return;
+    }
+
+    // Check if we have any Russian content
+    const hasRussianContent = formData.transportMethods.some(method => {
+      const cond = formData.conditions[method];
+      return cond && (cond.maxCarrierSize || cond.maxWeight || cond.allowedAnimals || cond.additionalInfo);
+    });
+
+    if (!hasRussianContent) {
+      alert('Сначала заполните русские поля для перевода');
+      return;
+    }
+
+    // Save first if editing existing airline
+    if (airline) {
+      if (!confirm('Сохранить изменения и перевести на английский с помощью DeepL?')) {
+        return;
+      }
+      
+      setTranslating(true);
+      try {
+        // Submit first
+        await onSubmit(formData);
+        // Then translate
+        await ApiService.translateAirline(formData.id);
+        // Reload the airline to get translations
+        const updated = await ApiService.getAirlineById(formData.id);
+        
+        // Update form with translations
+        const normalizedConditions: any = {};
+        Object.entries(updated.conditions).forEach(([method, cond]) => {
+          if (cond) {
+            normalizedConditions[method] = {
+              maxCarrierSize: cond.maxCarrierSize,
+              maxWeight: cond.maxWeight,
+              allowedAnimals: cond.allowedAnimals,
+              additionalInfo: cond.additionalInfo,
+            };
+          }
+        });
+        
+        setFormData({
+          ...updated,
+          conditions: normalizedConditions,
+        });
+        
+        alert('Перевод выполнен! 🎉');
+      } catch (err) {
+        alert(err instanceof Error ? err.message : 'Ошибка перевода');
+      } finally {
+        setTranslating(false);
+      }
+    } else {
+      // Creating new airline - save first, then translate
+      if (!confirm('Создать авиакомпанию и перевести на английский с помощью DeepL?')) {
+        return;
+      }
+
+      setTranslating(true);
+      try {
+        // Create first
+        await onSubmit(formData);
+        // Then translate
+        await ApiService.translateAirline(formData.id);
+        // Reload to get translations
+        const updated = await ApiService.getAirlineById(formData.id);
+        
+        // Update form with translations
+        const normalizedConditions: any = {};
+        Object.entries(updated.conditions).forEach(([method, cond]) => {
+          if (cond) {
+            normalizedConditions[method] = {
+              maxCarrierSize: cond.maxCarrierSize,
+              maxWeight: cond.maxWeight,
+              allowedAnimals: cond.allowedAnimals,
+              additionalInfo: cond.additionalInfo,
+            };
+          }
+        });
+        
+        setFormData({
+          ...updated,
+          conditions: normalizedConditions,
+        });
+        
+        alert('Авиакомпания создана и переведена! 🎉\nТеперь можете отредактировать перевод при необходимости.');
+      } catch (err) {
+        alert(err instanceof Error ? err.message : 'Ошибка');
+      } finally {
+        setTranslating(false);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -251,9 +345,30 @@ export function AirlineForm({ airline, onSubmit, onCancel }: AirlineFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">
-        {airline ? 'Редактировать авиакомпанию' : 'Добавить авиакомпанию'}
-      </h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">
+          {airline ? 'Редактировать авиакомпанию' : 'Добавить авиакомпанию'}
+        </h2>
+        <button
+          type="button"
+          onClick={handleTranslateInForm}
+          disabled={translating || loading}
+          className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Перевести все русские поля на английский с помощью DeepL"
+        >
+          {translating ? (
+            <>
+              <span className="animate-spin">⏳</span>
+              <span>Перевод...</span>
+            </>
+          ) : (
+            <>
+              <span>🌐</span>
+              <span>Перевести на EN</span>
+            </>
+          )}
+        </button>
+      </div>
 
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
