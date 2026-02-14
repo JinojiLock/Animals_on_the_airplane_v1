@@ -1,0 +1,15 @@
+# AirPets - robots.txt
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin
+Disallow: /admin/*
+
+# Sitemap
+Sitemap: https://air-pets.com/sitemap.xml
+
+# Crawl delay (optional, adjust if needed)
+Crawl-delay: 1

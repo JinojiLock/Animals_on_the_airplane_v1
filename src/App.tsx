@@ -1,95 +1,108 @@
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import Header from './components/Header';
-import Filters from './components/Filters';
-import AirlineCard from './components/AirlineCard';
-import Footer from './components/Footer';
-import DonateButton from './components/DonateButton';
-import { JsonDataService } from './services/DataService';
-import type { Airline } from './types';
-import { useFilters } from './hooks/useFilters';
-import airlinesData from './data/airlines.json';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { HomePage } from './pages/HomePage';
+import AirlineDetailPage from './pages/AirlineDetailPage';
+import FAQPage from './pages/FAQPage';
+import AboutPage from './pages/AboutPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfUsePage from './pages/TermsOfUsePage';
+import { AdminPanel } from './pages/admin/AdminPanel';
+import { LoginPage } from './pages/admin/LoginPage';
+import { initGA, initYM, trackPageView } from './utils/analytics';
+
+// Admin password from env or default
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123';
+const ADMIN_URL = import.meta.env.VITE_ADMIN_URL || '/admin-secret-panel';
+
+// Block default /admin path for security
+const BLOCKED_ADMIN_PATH = '/admin';
+
+// Debug logging (remove in production)
+if (import.meta.env.DEV) {
+  console.log('🔒 Admin configuration:', {
+    ADMIN_URL,
+    ADMIN_PASSWORD: ADMIN_PASSWORD ? '✓ Set' : '✗ Not set',
+    ENV_LOADED: import.meta.env.VITE_ADMIN_URL ? '✓ Yes' : '✗ No (using default)'
+  });
+}
+
+// Analytics initialization
+const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID;
+const YM_COUNTER_ID = import.meta.env.VITE_YM_COUNTER_ID;
+
+// Track page views component
+function AnalyticsTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(location.pathname + location.search);
+  }, [location]);
+
+  return null;
+}
 
 function App() {
-  const [airlines, setAirlines] = useState<Airline[]>([]);
-  const [filteredAirlines, setFilteredAirlines] = useState<Airline[]>([]);
-  const [loading, setLoading] = useState(true);
-  
-  const { filters, toggleTransportMethod, setSearchQuery } = useFilters();
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
 
-  // Инициализация сервиса данных
-  const dataService = new JsonDataService(airlinesData as Airline[]);
+  const handleLogin = (password: string) => {
+    if (password === ADMIN_PASSWORD) {
+      setIsAdminAuthenticated(true);
+      localStorage.setItem('admin_auth', 'true');
+    } else {
+      alert('Неверный пароль');
+    }
+  };
 
-  // Загрузка данных при монтировании компонента
+  // Check for saved auth on mount
   useEffect(() => {
-    const loadAirlines = async () => {
-      try {
-        setLoading(true);
-        const data = await dataService.getAirlines();
-        setAirlines(data);
-        setFilteredAirlines(data);
-      } catch (error) {
-        console.error('Ошибка загрузки данных:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const savedAuth = localStorage.getItem('admin_auth');
+    if (savedAuth === 'true') {
+      setIsAdminAuthenticated(true);
+    }
 
-    loadAirlines();
+    // Initialize analytics
+    if (GA_TRACKING_ID) {
+      initGA(GA_TRACKING_ID);
+    }
+    if (YM_COUNTER_ID) {
+      initYM(YM_COUNTER_ID);
+    }
   }, []);
 
-  // Применение фильтров при их изменении
-  useEffect(() => {
-    const filtered = dataService.filterAirlines(
-      airlines,
-      filters.transportMethods,
-      filters.searchQuery
-    );
-    setFilteredAirlines(filtered);
-  }, [filters, airlines]);
-
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <Header />
+    <ThemeProvider>
+      <BrowserRouter>
+        <AnalyticsTracker />
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/airline/:id" element={<AirlineDetailPage />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms" element={<TermsOfUsePage />} />
+          
+          {/* Admin routes */}
+          {/* Explicitly block /admin for security */}
+          <Route path={BLOCKED_ADMIN_PATH} element={<Navigate to="/" replace />} />
+          
+          <Route
+            path={ADMIN_URL}
+            element={
+              isAdminAuthenticated ? (
+                <AdminPanel />
+              ) : (
+                <LoginPage onLogin={handleLogin} />
+              )
+            }
+          />
 
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <Filters
-          selectedMethods={filters.transportMethods}
-          searchQuery={filters.searchQuery}
-          onMethodToggle={toggleTransportMethod}
-          onSearchChange={setSearchQuery}
-        />
-
-        {loading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
-          </div>
-        ) : filteredAirlines.length === 0 ? (
-          <div className="text-center py-20">
-            <span className="text-6xl mb-4 block">🔍</span>
-            <h3 className="text-2xl font-semibold text-gray-700 mb-2">
-              Авиакомпании не найдены
-            </h3>
-            <p className="text-gray-500">
-              Попробуйте изменить параметры поиска или сбросить фильтры
-            </p>
-          </div>
-        ) : (
-          <>
-            <div className="mb-4 text-gray-600">
-              Найдено авиакомпаний: <span className="font-semibold">{filteredAirlines.length}</span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredAirlines.map((airline) => (
-                <AirlineCard key={airline.id} airline={airline} />
-              ))}
-            </div>
-          </>
-        )}
-      </main>
-
-      <Footer />
-      <DonateButton />
-    </div>
+          {/* Redirect unknown routes to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
